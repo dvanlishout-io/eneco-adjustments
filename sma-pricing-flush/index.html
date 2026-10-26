@@ -163,9 +163,9 @@
 
     /* ===== PAGE CONTENT ===== */
     .page-content {
-      max-width: 1340px;
-      margin: 0 auto;
-      padding: 48px 40px 60px;
+      max-width: none;
+      margin: 0;
+      padding: 48px 144px 60px;
     }
 
     .page-heading {
@@ -188,18 +188,10 @@
       margin-bottom: 40px;
     }
 
-    @media (max-width: 1024px) {
-      .page-content { padding: 32px 16px 40px; }
-      .page-heading { font-size: 28px; line-height: 36px; }
-      .stepper { gap: 0; padding: 8px 16px 0; overflow-x: auto; }
-      .stepper__step { font-size: 13px; white-space: nowrap; }
-      .stepper__chevron { margin: 0 8px; }
-    }
-
     /* ===== GRID ===== */
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 420px));
+      grid-template-columns: minmax(0, 420px);
       gap: 24px;
       justify-content: center;
       align-items: start;
@@ -233,15 +225,29 @@
       gap: 8px;
     }
 
-    .ribbon__item--bordered {
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--color-ribbon-border);
+    .ribbon__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
     }
 
-    .ribbon__icon {
-      width: 20px;
-      height: 20px;
+    .ribbon__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: #fff;
+      border-radius: 6px;
       flex-shrink: 0;
+    }
+
+    .ribbon__separator {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--color-ribbon-text);
+      margin: 0 2px;
     }
 
     .ribbon__text {
@@ -296,8 +302,10 @@
     /* — Price — */
     .card__price {
       display: flex;
-      align-items: flex-end;
-      gap: 8px;
+      flex-wrap: wrap;
+      align-items: baseline;
+      column-gap: 8px;
+      row-gap: 0;
       padding: 0 24px;
     }
 
@@ -315,7 +323,17 @@
       line-height: 36px;
     }
 
+    .price__original {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-text-secondary);
+      text-decoration: line-through;
+    }
+
     .price__period {
+      flex-basis: 100%;
       font-family: var(--font);
       font-weight: 300;
       font-size: 16px;
@@ -442,9 +460,184 @@
     .footnote__asterisk { flex-shrink: 0; }
     .footnote__text p + p { margin-top: 8px; }
 
+
+    /* ===== CARD COUNT TOGGLE ===== */
+    .card-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .card-toggle__label {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-secondary);
+    }
+
+    .card-toggle__label--active {
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .card-toggle__switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #d0caef;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .card-toggle__switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .card-toggle__switch[aria-checked="true"] {
+      background: var(--color-button);
+    }
+
+    .card-toggle__switch[aria-checked="true"]::after {
+      transform: translateX(20px);
+    }
+
+    /* 4th card hidden by default */
+    .card.card--extra {
+      display: none !important;
+    }
+
+    .pricing-grid--four .card.card--extra {
+      display: flex !important;
+    }
+
+    /* ===== SUPPORT FABS ===== */
+    .support-fabs {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      z-index: 1000;
+    }
+
+    .support-fab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 10px 0 rgba(47, 45, 45, 0.10);
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+      padding: 0;
+      position: relative;
+    }
+
+    .support-fab:hover {
+      box-shadow: 0 5px 16px 0 rgba(47, 45, 45, 0.18);
+      transform: scale(1.06);
+    }
+
+    .support-fab--chat {
+      background: #fff;
+    }
+
+    .support-fab--phone {
+      background: #fff;
+    }
+
+    .support-fab svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .support-fab__label {
+      position: absolute;
+      right: calc(100% + 10px);
+      white-space: nowrap;
+      background: #fff;
+      color: var(--color-text-primary);
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px 0 rgba(47, 45, 45, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .support-fab:hover .support-fab__label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (min-width: 1228px) {
+      .support-fabs {
+        bottom: 32px;
+        right: 32px;
+      }
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1024px) {
+      .page-content { padding: 32px 24px 40px; }
+      .page-heading { font-size: 28px; line-height: 36px; }
+      .stepper {
+        gap: 0; padding: 8px 16px 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .stepper::-webkit-scrollbar { display: none; }
+      .stepper__step { font-size: 13px; white-space: nowrap; }
+      .stepper__chevron { margin: 0 8px; }
       .pricing-grid { gap: 16px; }
+    }
+
+    @media (max-width: 639px) {
+      .site-header { padding: 12px 16px; }
+      .header__logo img { height: 36px; }
+
+      .page-content { padding: 24px 16px 32px; }
+      .page-heading { font-size: 24px; line-height: 32px; margin-bottom: 8px; }
+      .page-intro { font-size: 15px; line-height: 22px; margin-bottom: 24px; }
+
+      .card { gap: 16px; }
+      .card__ribbon:has(.ribbon__item) { padding: 12px 16px; gap: 12px; }
+      .card__title { padding: 0 16px; font-size: 22px; line-height: 26px; }
+      .card__features { padding: 0 16px; }
+      .card__price { padding: 0 16px; }
+      .card__conditional { padding: 0 16px; }
+      .card__cta { padding: 0 16px; }
+      .card__footnotes:has(.footnote) { padding: 0 16px 16px; }
+      .conditional__box:has(.conditional__label) { padding: 12px; }
+
+      .cta__button { height: 52px; font-size: 16px; }
+      .cta__link { font-size: 16px; }
     }
 
     /* ===== FLUSH MODE (desktop) ===== */
@@ -452,7 +645,7 @@
       .pricing-grid {
         --flush-py: 12px;
         --flush-py-outer: 24px;
-        grid-template-columns: repeat(3, minmax(360px, 420px));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         grid-template-rows: repeat(7, auto);
         row-gap: 0;
         column-gap: 24px;
@@ -526,6 +719,21 @@
       .card__footnotes:empty {
         display: none;
       }
+
+      /* 4-card override */
+      .pricing-grid--four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: 16px;
+      }
+
+      .pricing-grid--four .card.card--extra {
+        display: contents !important;
+      }
+
+      .page-content:not(:has(.pricing-grid--four)) {
+        padding-left: 240px;
+        padding-right: 240px;
+      }
     }
   </style>
 </head>
@@ -560,18 +768,23 @@
     <h1 class="page-heading">Onze voorstellen op basis van je gegevens</h1>
     <p class="page-intro">De weergegeven prijzen zijn indicatief en berekend op basis van jouw opgegeven verbruik en huidige marktprijzen. Je definitieve tarief kan verschillen afhankelijk van jouw exacte verbruikspatroon en de marktomstandigheden op het moment van overstap.</p>
 
+    <div class="card-toggle">
+      <span class="card-toggle__label card-toggle__label--active" id="label-3">3 producten</span>
+      <button class="card-toggle__switch" role="switch" aria-checked="false" aria-label="Toon 4 producten" id="card-toggle"></button>
+      <span class="card-toggle__label" id="label-4">4 producten</span>
+    </div>
+
     <div class="pricing-grid">
 
     <article class="card">
       <div class="card__bg"></div>
       <div class="card__ribbon">
-        <div class="ribbon__item ribbon__item--bordered">
-          <svg class="ribbon__icon" viewBox="0 0 19.58 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.178 10.833V18.333H5.915C4.45 18.333 3.263 17.12 3.263 15.625v-4.792h5.915Zm7.139 0v4.792c0 1.496-1.187 2.708-2.652 2.708H10.402v-7.5h5.915ZM11.83 1.667c1.464 0 2.652 1.212 2.652 2.708 0 .537-.154 1.038-.418 1.46l2.05-.002c.563 0 1.02.389 1.02.868v2.431c0 .48-.457.868-1.02.868l-5.712-.001V5.833H9.178V10L3.467 10c-.563 0-1.02-.389-1.02-.868V6.7c0-.48.457-.868 1.02-.868l2.05.001a2.727 2.727 0 0 1-.418-1.459c0-1.496 1.187-2.708 2.652-2.708.82 0 1.554.381 2.04.978a2.618 2.618 0 0 1 2.04-.978ZM7.75 2.917c-.788 0-1.427.653-1.427 1.458 0 .765.577 1.393 1.31 1.453l.118.005h1.428V4.375l-.005-.12c-.06-.749-.673-1.338-1.423-1.338Zm4.08 0c-.789 0-1.428.653-1.428 1.458v1.458h1.428c.789 0 1.428-.653 1.428-1.458s-.64-1.458-1.428-1.458Z" fill="#3E235B"/></svg>
-          <span class="ribbon__text">Zon &amp; Wind Flex One: &euro;100 korting</span>
-        </div>
         <div class="ribbon__item">
-          <svg class="ribbon__icon" viewBox="0 0 19.58 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.178 10.833V18.333H5.915C4.45 18.333 3.263 17.12 3.263 15.625v-4.792h5.915Zm7.139 0v4.792c0 1.496-1.187 2.708-2.652 2.708H10.402v-7.5h5.915ZM11.83 1.667c1.464 0 2.652 1.212 2.652 2.708 0 .537-.154 1.038-.418 1.46l2.05-.002c.563 0 1.02.389 1.02.868v2.431c0 .48-.457.868-1.02.868l-5.712-.001V5.833H9.178V10L3.467 10c-.563 0-1.02-.389-1.02-.868V6.7c0-.48.457-.868 1.02-.868l2.05.001a2.727 2.727 0 0 1-.418-1.459c0-1.496 1.187-2.708 2.652-2.708.82 0 1.554.381 2.04.978a2.618 2.618 0 0 1 2.04-.978ZM7.75 2.917c-.788 0-1.427.653-1.427 1.458 0 .765.577 1.393 1.31 1.453l.118.005h1.428V4.375l-.005-.12c-.06-.749-.673-1.338-1.423-1.338Zm4.08 0c-.789 0-1.428.653-1.428 1.458v1.458h1.428c.789 0 1.428-.653 1.428-1.458s-.64-1.458-1.428-1.458Z" fill="#3E235B"/></svg>
-          <span class="ribbon__text">Aardgas Flex One: &euro;100 korting</span>
+          <span class="ribbon__badge"><svg class="ribbon__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9077 8.78318C14.8372 8.64731 14.7305 8.53344 14.5993 8.45406C14.4682 8.37469 14.3177 8.33286 14.1643 8.33318H11.3411L12.4938 2.66651C12.5316 2.47883 12.5035 2.28388 12.4142 2.11444C12.3249 1.945 12.1798 1.8114 12.0034 1.7361C11.827 1.66081 11.63 1.64841 11.4455 1.701C11.261 1.75358 11.1003 1.86794 10.9903 2.02485L5.14349 10.3582C5.0611 10.4797 5.01231 10.6207 5.00204 10.767C4.99177 10.9133 5.0204 11.0598 5.08503 11.1915C5.15083 11.3296 5.25343 11.4469 5.3816 11.5307C5.50976 11.6145 5.65856 11.6615 5.8117 11.6665H8.63489L7.48223 17.3332C7.44385 17.5216 7.47194 17.7174 7.56176 17.8876C7.65157 18.0577 7.79758 18.1915 7.97503 18.2665C8.08321 18.3125 8.19991 18.3353 8.31749 18.3332C8.45215 18.333 8.58476 18.3003 8.70402 18.2379C8.82328 18.1755 8.92565 18.0852 9.0024 17.9748L14.8492 9.64151C14.9363 9.51728 14.9878 9.3717 14.9981 9.22046C15.0084 9.06921 14.9771 8.91803 14.9077 8.78318Z" fill="#007250"/></svg></span>
+          <span class="ribbon__text">&euro;100 korting*</span>
+          <span class="ribbon__separator">+</span>
+          <span class="ribbon__badge"><svg class="ribbon__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.525 1.85017C10.3765 1.72977 10.1912 1.66406 10 1.66406C9.80883 1.66406 9.62346 1.72977 9.475 1.85017C9.29167 2.00012 5 5.50726 5 9.9974C5 14.4875 9.29167 17.9947 9.475 18.1446C9.62346 18.265 9.80883 18.3307 10 18.3307C10.1912 18.3307 10.3765 18.265 10.525 18.1446C10.7083 17.9947 15 14.4875 15 9.9974C15 5.50726 10.7083 2.00012 10.525 1.85017ZM10 16.6618C9.00648 15.4913 8.42142 14.0291 8.33333 12.4965C8.42142 10.964 9.00648 9.50181 10 8.3313C10.9935 9.50181 11.5786 10.964 11.6667 12.4965C11.5786 14.0291 10.9935 15.4913 10 16.6618Z" fill="#692682"/></svg></span>
+          <span class="ribbon__text">&euro;100 korting*</span>
         </div>
       </div>
       <h2 class="card__title">Zon &amp; Wind Flex One +<br>Aardgas Flex One</h2>
@@ -591,7 +804,8 @@
       </ul>
       <div class="card__price">
         <span class="price__euro">&euro;</span>
-        <span class="price__amount">119,12</span>
+        <span class="price__amount">126,29</span>
+        <span class="price__original">&euro; 139,50</span>
         <span class="price__period">per maand</span>
       </div>
       <div class="card__conditional">
@@ -601,7 +815,7 @@
             <svg class="conditional__info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1.667A8.333 8.333 0 1 0 10 18.333 8.333 8.333 0 0 0 10 1.667Zm0 12.5a.833.833 0 0 1-.833-.834V10a.833.833 0 1 1 1.666 0v3.333a.833.833 0 0 1-.833.834ZM10.833 7.5H9.167V5.833h1.666V7.5Z" fill="#2F2D2D"/></svg>
           </div>
           <div class="conditional__price">
-            <span class="conditional__price-amount">&euro; 102,45</span>
+            <span class="conditional__price-amount">&euro; 109,87</span>
             <span class="conditional__price-period">per maand</span>
           </div>
         </div>
@@ -625,8 +839,8 @@
       <div class="card__bg"></div>
       <div class="card__ribbon">
         <div class="ribbon__item">
-          <svg class="ribbon__icon" viewBox="0 0 19.58 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.178 10.833V18.333H5.915C4.45 18.333 3.263 17.12 3.263 15.625v-4.792h5.915Zm7.139 0v4.792c0 1.496-1.187 2.708-2.652 2.708H10.402v-7.5h5.915ZM11.83 1.667c1.464 0 2.652 1.212 2.652 2.708 0 .537-.154 1.038-.418 1.46l2.05-.002c.563 0 1.02.389 1.02.868v2.431c0 .48-.457.868-1.02.868l-5.712-.001V5.833H9.178V10L3.467 10c-.563 0-1.02-.389-1.02-.868V6.7c0-.48.457-.868 1.02-.868l2.05.001a2.727 2.727 0 0 1-.418-1.459c0-1.496 1.187-2.708 2.652-2.708.82 0 1.554.381 2.04.978a2.618 2.618 0 0 1 2.04-.978ZM7.75 2.917c-.788 0-1.427.653-1.427 1.458 0 .765.577 1.393 1.31 1.453l.118.005h1.428V4.375l-.005-.12c-.06-.749-.673-1.338-1.423-1.338Zm4.08 0c-.789 0-1.428.653-1.428 1.458v1.458h1.428c.789 0 1.428-.653 1.428-1.458s-.64-1.458-1.428-1.458Z" fill="#3E235B"/></svg>
-          <span class="ribbon__text">Zon &amp; Wind Flex One: &euro;100 korting</span>
+          <span class="ribbon__badge"><svg class="ribbon__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9077 8.78318C14.8372 8.64731 14.7305 8.53344 14.5993 8.45406C14.4682 8.37469 14.3177 8.33286 14.1643 8.33318H11.3411L12.4938 2.66651C12.5316 2.47883 12.5035 2.28388 12.4142 2.11444C12.3249 1.945 12.1798 1.8114 12.0034 1.7361C11.827 1.66081 11.63 1.64841 11.4455 1.701C11.261 1.75358 11.1003 1.86794 10.9903 2.02485L5.14349 10.3582C5.0611 10.4797 5.01231 10.6207 5.00204 10.767C4.99177 10.9133 5.0204 11.0598 5.08503 11.1915C5.15083 11.3296 5.25343 11.4469 5.3816 11.5307C5.50976 11.6145 5.65856 11.6615 5.8117 11.6665H8.63489L7.48223 17.3332C7.44385 17.5216 7.47194 17.7174 7.56176 17.8876C7.65157 18.0577 7.79758 18.1915 7.97503 18.2665C8.08321 18.3125 8.19991 18.3353 8.31749 18.3332C8.45215 18.333 8.58476 18.3003 8.70402 18.2379C8.82328 18.1755 8.92565 18.0852 9.0024 17.9748L14.8492 9.64151C14.9363 9.51728 14.9878 9.3717 14.9981 9.22046C15.0084 9.06921 14.9771 8.91803 14.9077 8.78318Z" fill="#007250"/></svg></span>
+          <span class="ribbon__text">&euro;100 korting*</span>
         </div>
       </div>
       <h2 class="card__title">Zon &amp; Wind Flex One +<br>Aardgas Fix One</h2>
@@ -642,7 +856,8 @@
       </ul>
       <div class="card__price">
         <span class="price__euro">&euro;</span>
-        <span class="price__amount">119,12</span>
+        <span class="price__amount">102,45</span>
+        <span class="price__original">&euro; 119,12</span>
         <span class="price__period">per maand</span>
       </div>
       <div class="card__conditional">
@@ -652,7 +867,7 @@
             <svg class="conditional__info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1.667A8.333 8.333 0 1 0 10 18.333 8.333 8.333 0 0 0 10 1.667Zm0 12.5a.833.833 0 0 1-.833-.834V10a.833.833 0 1 1 1.666 0v3.333a.833.833 0 0 1-.833.834ZM10.833 7.5H9.167V5.833h1.666V7.5Z" fill="#2F2D2D"/></svg>
           </div>
           <div class="conditional__price">
-            <span class="conditional__price-amount">&euro; 102,45</span>
+            <span class="conditional__price-amount">&euro; 89,90</span>
             <span class="conditional__price-period">per maand</span>
           </div>
         </div>
@@ -702,12 +917,68 @@
       <footer class="card__footnotes"></footer>
     </article>
 
+    <article class="card card--extra">
+      <div class="card__bg"></div>
+      <div class="card__ribbon"></div>
+      <h2 class="card__title">Zon &amp; Wind Vast +<br>Aardgas Fix One</h2>
+      <ul class="card__features">
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Vaste prijs</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Zekerheid over je maandbedrag</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">100% groene en Belgische elektriciteit</span>
+        </li>
+      </ul>
+      <div class="card__price">
+        <span class="price__euro">&euro;</span>
+        <span class="price__amount">112,80</span>
+        <span class="price__period">per maand</span>
+      </div>
+      <div class="card__conditional"></div>
+      <div class="card__cta">
+        <a class="cta__button" href="#">Product selecteren</a>
+        <a class="cta__link" href="#">Bekijk de details</a>
+      </div>
+      <footer class="card__footnotes"></footer>
+    </article>
+
     </div>
   </main>
 
+  <div class="support-fabs">
+    <button class="support-fab support-fab--phone" aria-label="Bel ons">
+      <span class="support-fab__label">Bel ons</span>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="#007250"/><text x="12" y="15" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-weight="700" font-size="13" fill="#fff">?</text></svg>
+    </button>
+    <button class="support-fab support-fab--chat" aria-label="Chat met Elli">
+      <span class="support-fab__label">Chat met Elli</span>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="#007250"/><rect x="7" y="7" width="10" height="1.5" rx=".75" fill="#fff"/><rect x="7" y="10.5" width="7" height="1.5" rx=".75" fill="#fff"/></svg>
+    </button>
+  </div>
+
   <script>
-    document.querySelectorAll('.pricing-grid .card').forEach((card, i) => {
+    const cards = document.querySelectorAll('.pricing-grid .card');
+    cards.forEach((card, i) => {
       card.style.setProperty('--col', i + 1);
+    });
+
+    const toggle = document.getElementById('card-toggle');
+    const grid = document.querySelector('.pricing-grid');
+    const label3 = document.getElementById('label-3');
+    const label4 = document.getElementById('label-4');
+
+    toggle.addEventListener('click', () => {
+      const show4 = toggle.getAttribute('aria-checked') !== 'true';
+      toggle.setAttribute('aria-checked', show4);
+      grid.classList.toggle('pricing-grid--four', show4);
+      label3.classList.toggle('card-toggle__label--active', !show4);
+      label4.classList.toggle('card-toggle__label--active', show4);
     });
   </script>
 
