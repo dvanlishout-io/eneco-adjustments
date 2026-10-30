@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMA-BE Pricing Cards — Flush</title>
+  <style>
+    @font-face {
+      font-family: 'Etelka';
+      src: url('fonts/Etelka-Light.woff2') format('woff2'),
+           url('fonts/Etelka-Light.woff') format('woff');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Etelka';
+      src: url('fonts/Etelka-Text.woff2') format('woff2'),
+           url('fonts/Etelka-Text.woff') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Etelka';
+      src: url('fonts/Etelka-Bold.woff2') format('woff2'),
+           url('fonts/Etelka-Bold.woff') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #f8f6f6;
+      --color-card: #ffffff;
+      --color-text-primary: #2f2d2d;
+      --color-text-secondary: #716a6a;
+      --color-ribbon-bg: #e8e6f4;
+      --color-ribbon-border: #d0caef;
+      --color-ribbon-text: #3e235b;
+      --color-button: #007250;
+      --color-link: #007250;
+      --color-link-underline: #84dc99;
+      --color-check: #009B65;
+      --color-shadow: rgba(47, 45, 45, 0.12);
+      --radius-card: 16px;
+      --radius-button: 8px;
+      --radius-highlight: 8px;
+      --font: 'Etelka', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      font-weight: 400;
+      background: var(--color-bg);
+      color: var(--color-text-primary);
+      margin: 0;
+    }
+
+    /* ===== HEADER ===== */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background: #fff;
+    }
+
+    .header__back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-text-primary);
+      text-decoration: none;
+    }
+
+    .header__back:hover { color: var(--color-link); }
+
+    .header__back svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .header__logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .header__logo img {
+      height: 48px;
+      width: auto;
+    }
+
+    .header__close {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-primary);
+    }
+
+    .header__close svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* ===== STEPPER ===== */
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 12px 24px 0;
+      background: #fff;
+      border-bottom: 1px solid #e4e0e0;
+    }
+
+    .stepper__step {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 12px 0;
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-secondary);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .stepper__step--active {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      border-bottom-color: var(--color-button);
+    }
+
+    .stepper__chevron {
+      width: 16px;
+      height: 16px;
+      margin: 0 12px;
+      color: var(--color-text-secondary);
+      flex-shrink: 0;
+    }
+
+    /* ===== PAGE CONTENT ===== */
+    .page-content {
+      max-width: none;
+      margin: 0;
+      padding: 48px 144px 60px;
+    }
+
+    .page-heading {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 36px;
+      line-height: 44px;
+      color: var(--color-text-primary);
+      margin-bottom: 12px;
+    }
+
+    .page-intro {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-secondary);
+      max-width: 880px;
+      margin-bottom: 40px;
+    }
+
+    /* ===== GRID ===== */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 420px);
+      gap: 24px;
+      justify-content: center;
+      align-items: start;
+    }
+
+    /* ===== CARD (mobile: stacked) ===== */
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background: var(--color-card);
+      border-radius: var(--radius-card);
+      overflow: clip;
+      box-shadow: 0px 4px 12px 0px var(--color-shadow);
+    }
+
+    .card__bg { display: none; }
+
+    /* — Ribbon — */
+    .card__ribbon:has(.ribbon__item) {
+      background: var(--color-ribbon-bg);
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ribbon__item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ribbon__icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .ribbon__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: #fff;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+
+    .ribbon__separator {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--color-ribbon-text);
+      margin: 0 2px;
+    }
+
+    .ribbon__text {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      color: var(--color-ribbon-text);
+    }
+
+    /* — Title — */
+    .card__title {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 28px;
+      color: var(--color-text-primary);
+      padding: 0 24px;
+    }
+
+    /* — Features — */
+    .card__features {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 24px;
+      list-style: none;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .feature__icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .feature__text {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-primary);
+    }
+
+    /* — Price — */
+    .card__price {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      column-gap: 8px;
+      row-gap: 0;
+      padding: 0 24px;
+    }
+
+    .price__euro {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    .price__amount {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 36px;
+    }
+
+    .price__original {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--color-text-secondary);
+      text-decoration: line-through;
+    }
+
+    .price__period {
+      flex-basis: 100%;
+      font-family: var(--font);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-secondary);
+    }
+
+    /* — Conditional price — */
+    .card__conditional { padding: 0 24px; }
+
+    .conditional__box:has(.conditional__label) {
+      background: var(--color-ribbon-bg);
+      border-radius: var(--radius-highlight);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .conditional__label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-primary);
+    }
+
+    .conditional__info {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .conditional__price {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .conditional__price-amount {
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+      color: var(--color-text-primary);
+    }
+
+    .conditional__price-period {
+      font-family: var(--font);
+      font-weight: 300;
+      font-size: 14px;
+      line-height: 24px;
+      letter-spacing: 0.3px;
+    }
+
+    /* — CTA — */
+    .card__cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 24px;
+    }
+
+    .cta__button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 60px;
+      background: var(--color-button);
+      color: #fff;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 28px;
+      text-decoration: none;
+      border-radius: var(--radius-button);
+      transition: background 0.15s;
+    }
+
+    .cta__button:hover { background: #005a3e; }
+
+    .cta__link {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 4px;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 28px;
+      color: var(--color-link);
+      text-decoration: none;
+      width: fit-content;
+      padding: 6px 0;
+    }
+
+    .cta__link::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--color-link-underline);
+    }
+
+    /* — Footnotes — */
+    .card__footnotes:has(.footnote) { padding: 0 24px 24px; }
+
+    .footnote {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-secondary);
+    }
+
+    .footnote__asterisk { flex-shrink: 0; }
+    .footnote__text p + p { margin-top: 8px; }
+
+
+    /* ===== CARD COUNT TOGGLE ===== */
+    .card-toggle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .card-toggle__label {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      color: var(--color-text-secondary);
+    }
+
+    .card-toggle__label--active {
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .card-toggle__switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: #d0caef;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .card-toggle__switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .card-toggle__switch[aria-checked="true"] {
+      background: var(--color-button);
+    }
+
+    .card-toggle__switch[aria-checked="true"]::after {
+      transform: translateX(20px);
+    }
+
+    /* 4th card hidden by default */
+    .card.card--extra {
+      display: none !important;
+    }
+
+    .pricing-grid--four .card.card--extra {
+      display: flex !important;
+    }
+
+    /* ===== SUPPORT FABS ===== */
+    .support-fabs {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      z-index: 1000;
+    }
+
+    .support-fab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 10px 0 rgba(47, 45, 45, 0.10);
+      transition: box-shadow 0.2s ease, transform 0.15s ease;
+      padding: 0;
+      position: relative;
+    }
+
+    .support-fab:hover {
+      box-shadow: 0 5px 16px 0 rgba(47, 45, 45, 0.18);
+      transform: scale(1.06);
+    }
+
+    .support-fab--chat {
+      background: #fff;
+    }
+
+    .support-fab--phone {
+      background: #fff;
+    }
+
+    .support-fab svg {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .support-fab__label {
+      position: absolute;
+      right: calc(100% + 10px);
+      white-space: nowrap;
+      background: #fff;
+      color: var(--color-text-primary);
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 20px;
+      letter-spacing: 0.3px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px 0 rgba(47, 45, 45, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .support-fab:hover .support-fab__label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (min-width: 1228px) {
+      .support-fabs {
+        bottom: 32px;
+        right: 32px;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .page-content { padding: 32px 24px 40px; }
+      .page-heading { font-size: 28px; line-height: 36px; }
+      .stepper {
+        gap: 0; padding: 8px 16px 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .stepper::-webkit-scrollbar { display: none; }
+      .stepper__step { font-size: 13px; white-space: nowrap; }
+      .stepper__chevron { margin: 0 8px; }
+      .pricing-grid { gap: 16px; }
+    }
+
+    @media (max-width: 639px) {
+      .site-header { padding: 12px 16px; }
+      .header__logo img { height: 36px; }
+
+      .page-content { padding: 24px 16px 32px; }
+      .page-heading { font-size: 24px; line-height: 32px; margin-bottom: 8px; }
+      .page-intro { font-size: 15px; line-height: 22px; margin-bottom: 24px; }
+
+      .card { gap: 16px; }
+      .card__ribbon:has(.ribbon__item) { padding: 12px 16px; gap: 12px; }
+      .card__title { padding: 0 16px; font-size: 22px; line-height: 26px; }
+      .card__features { padding: 0 16px; }
+      .card__price { padding: 0 16px; }
+      .card__conditional { padding: 0 16px; }
+      .card__cta { padding: 0 16px; }
+      .card__footnotes:has(.footnote) { padding: 0 16px 16px; }
+      .conditional__box:has(.conditional__label) { padding: 12px; }
+
+      .cta__button { height: 52px; font-size: 16px; }
+      .cta__link { font-size: 16px; }
+    }
+
+    /* ===== FLUSH MODE (desktop) ===== */
+    @media (min-width: 1228px) {
+      .pricing-grid {
+        --flush-py: 12px;
+        --flush-py-outer: 24px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(7, auto);
+        row-gap: 0;
+        column-gap: 24px;
+      }
+
+      .card {
+        display: contents;
+        background: none;
+        box-shadow: none;
+        border-radius: 0;
+        overflow: visible;
+      }
+      .card > * { grid-column: var(--col); }
+
+      /* Row map */
+      .card__bg          { grid-row: 2 / 8; }
+      .card__ribbon      { grid-row: 1; }
+      .card__title       { grid-row: 2; }
+      .card__features    { grid-row: 3; }
+      .card__price       { grid-row: 4; }
+      .card__conditional { grid-row: 5; }
+      .card__cta         { grid-row: 6; }
+      .card__footnotes   { grid-row: 7; }
+
+      /* Card surface */
+      .card__bg {
+        display: block;
+        background: var(--color-card);
+        border-radius: var(--radius-card);
+        box-shadow: 0px 4px 12px 0px var(--color-shadow);
+        align-self: stretch;
+        z-index: 0;
+        position: relative;
+      }
+      .card > *:not(.card__bg) {
+        z-index: 1;
+        position: relative;
+      }
+
+      /* Vertical rhythm */
+      .card__title,
+      .card__features,
+      .card__price,
+      .card__conditional,
+      .card__cta {
+        padding-block: var(--flush-py);
+      }
+      .card__title { padding-top: var(--flush-py-outer); }
+      .card__cta { padding-bottom: var(--flush-py-outer); }
+      .card__footnotes:has(.footnote) {
+        padding-block: 0 var(--flush-py-outer);
+      }
+
+      /* Ribbon tab */
+      .card__ribbon:has(.ribbon__item) {
+        align-self: end;
+        border-radius: var(--radius-card) var(--radius-card) 0 0;
+      }
+
+      /* Content-driven shape */
+      .card:has(.ribbon__item) .card__bg {
+        border-radius: 0 0 var(--radius-card) var(--radius-card);
+      }
+      .card:not(:has(.footnote)) .card__bg {
+        grid-row-end: 7;
+      }
+
+      /* Collapse empties */
+      .card__ribbon:empty,
+      .card__conditional:empty,
+      .card__footnotes:empty {
+        display: none;
+      }
+
+      /* 4-card override */
+      .pricing-grid--four {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: 16px;
+      }
+
+      .pricing-grid--four .card.card--extra {
+        display: contents !important;
+      }
+
+      .page-content:not(:has(.pricing-grid--four)) {
+        padding-left: 240px;
+        padding-right: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+<!-- Dashboard nav — not part of the prototype -->
+<a href="../" style="position:fixed;top:12px;right:12px;z-index:99999;display:inline-flex;align-items:center;gap:6px;padding:6px 14px 6px 10px;background:rgba(0,0,0,.75);color:#fff;font:600 12px/1 system-ui,sans-serif;border-radius:999px;text-decoration:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 2px 8px rgba(0,0,0,.25);opacity:.55;transition:opacity .15s;cursor:pointer" onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='.55'"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l-5 5 5 5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8h14" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>Dashboard</a>
+
+  <header class="site-header">
+    <a href="#" class="header__back">
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Vorige
+    </a>
+    <div class="header__logo">
+      <img src="eneco-logo.png" alt="Eneco">
+    </div>
+    <button class="header__close" aria-label="Sluiten">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </header>
+
+  <nav class="stepper" aria-label="Stappen">
+    <span class="stepper__step">1. Berekening</span>
+    <svg class="stepper__chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="stepper__step stepper__step--active">2. Aanbod</span>
+    <svg class="stepper__chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="stepper__step">3. Gegevens</span>
+    <svg class="stepper__chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="stepper__step">4. Overzicht</span>
+    <svg class="stepper__chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="stepper__step">5. Bevestiging</span>
+  </nav>
+
+  <main class="page-content">
+    <h1 class="page-heading">Onze voorstellen op basis van je gegevens</h1>
+    <p class="page-intro">De weergegeven prijzen zijn indicatief en berekend op basis van jouw opgegeven verbruik en huidige marktprijzen. Je definitieve tarief kan verschillen afhankelijk van jouw exacte verbruikspatroon en de marktomstandigheden op het moment van overstap.</p>
+
+    <div class="card-toggle">
+      <span class="card-toggle__label card-toggle__label--active" id="label-3">3 producten</span>
+      <button class="card-toggle__switch" role="switch" aria-checked="false" aria-label="Toon 4 producten" id="card-toggle"></button>
+      <span class="card-toggle__label" id="label-4">4 producten</span>
+    </div>
+
+    <div class="pricing-grid">
+
+    <article class="card">
+      <div class="card__bg"></div>
+      <div class="card__ribbon">
+        <div class="ribbon__item">
+          <span class="ribbon__badge"><svg class="ribbon__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9077 8.78318C14.8372 8.64731 14.7305 8.53344 14.5993 8.45406C14.4682 8.37469 14.3177 8.33286 14.1643 8.33318H11.3411L12.4938 2.66651C12.5316 2.47883 12.5035 2.28388 12.4142 2.11444C12.3249 1.945 12.1798 1.8114 12.0034 1.7361C11.827 1.66081 11.63 1.64841 11.4455 1.701C11.261 1.75358 11.1003 1.86794 10.9903 2.02485L5.14349 10.3582C5.0611 10.4797 5.01231 10.6207 5.00204 10.767C4.99177 10.9133 5.0204 11.0598 5.08503 11.1915C5.15083 11.3296 5.25343 11.4469 5.3816 11.5307C5.50976 11.6145 5.65856 11.6615 5.8117 11.6665H8.63489L7.48223 17.3332C7.44385 17.5216 7.47194 17.7174 7.56176 17.8876C7.65157 18.0577 7.79758 18.1915 7.97503 18.2665C8.08321 18.3125 8.19991 18.3353 8.31749 18.3332C8.45215 18.333 8.58476 18.3003 8.70402 18.2379C8.82328 18.1755 8.92565 18.0852 9.0024 17.9748L14.8492 9.64151C14.9363 9.51728 14.9878 9.3717 14.9981 9.22046C15.0084 9.06921 14.9771 8.91803 14.9077 8.78318Z" fill="#007250"/></svg></span>
+          <span class="ribbon__text">&euro;100 korting*</span>
+          <span class="ribbon__separator">+</span>
+          <span class="ribbon__badge"><svg class="ribbon__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.525 1.85017C10.3765 1.72977 10.1912 1.66406 10 1.66406C9.80883 1.66406 9.62346 1.72977 9.475 1.85017C9.29167 2.00012 5 5.50726 5 9.9974C5 14.4875 9.29167 17.9947 9.475 18.1446C9.62346 18.265 9.80883 18.3307 10 18.3307C10.1912 18.3307 10.3765 18.265 10.525 18.1446C10.7083 17.9947 15 14.4875 15 9.9974C15 5.50726 10.7083 2.00012 10.525 1.85017ZM10 16.6618C9.00648 15.4913 8.42142 14.0291 8.33333 12.4965C8.42142 10.964 9.00648 9.50181 10 8.3313C10.9935 9.50181 11.5786 10.964 11.6667 12.4965C11.5786 14.0291 10.9935 15.4913 10 16.6618Z" fill="#692682"/></svg></span>
+          <span class="ribbon__text">&euro;100 korting*</span>
+        </div>
+      </div>
+      <h2 class="card__title">Zon &amp; Wind Flex One +<br>Aardgas Flex One</h2>
+      <ul class="card__features">
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Variabele prijs</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Profiteer meteen van prijsdalingen</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">100% groene en Belgische elektriciteit</span>
+        </li>
+      </ul>
+      <div class="card__price">
+        <span class="price__euro">&euro;</span>
+        <span class="price__amount">126,29</span>
+        <span class="price__original">&euro; 139,50</span>
+        <span class="price__period">per maand</span>
+      </div>
+      <div class="card__conditional">
+        <div class="conditional__box">
+          <div class="conditional__label">
+            <span>Prijs met voorwaardelijke korting</span>
+            <svg class="conditional__info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1.667A8.333 8.333 0 1 0 10 18.333 8.333 8.333 0 0 0 10 1.667Zm0 12.5a.833.833 0 0 1-.833-.834V10a.833.833 0 1 1 1.666 0v3.333a.833.833 0 0 1-.833.834ZM10.833 7.5H9.167V5.833h1.666V7.5Z" fill="#2F2D2D"/></svg>
+          </div>
+          <div class="conditional__price">
+            <span class="conditional__price-amount">&euro; 109,87</span>
+            <span class="conditional__price-period">per maand</span>
+          </div>
+        </div>
+      </div>
+      <div class="card__cta">
+        <a class="cta__button" href="#">Product selecteren</a>
+        <a class="cta__link" href="#">Bekijk de details</a>
+      </div>
+      <footer class="card__footnotes">
+        <div class="footnote">
+          <span class="footnote__asterisk">*</span>
+          <div class="footnote__text">
+            <p>Zon &amp; Wind Flex One: 100&euro; korting en 2,40 &euro;c/kWh korting. Aanbod geldig tot en met 18/09/2026</p>
+            <p>Aardgas Flex One: 100&euro; korting en 7,00 &euro;c/kWh korting. Aanbod geldig tot en met 18/09/2026</p>
+          </div>
+        </div>
+      </footer>
+    </article>
+
+    <article class="card">
+      <div class="card__bg"></div>
+      <div class="card__ribbon">
+        <div class="ribbon__item">
+          <span class="ribbon__badge"><svg class="ribbon__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9077 8.78318C14.8372 8.64731 14.7305 8.53344 14.5993 8.45406C14.4682 8.37469 14.3177 8.33286 14.1643 8.33318H11.3411L12.4938 2.66651C12.5316 2.47883 12.5035 2.28388 12.4142 2.11444C12.3249 1.945 12.1798 1.8114 12.0034 1.7361C11.827 1.66081 11.63 1.64841 11.4455 1.701C11.261 1.75358 11.1003 1.86794 10.9903 2.02485L5.14349 10.3582C5.0611 10.4797 5.01231 10.6207 5.00204 10.767C4.99177 10.9133 5.0204 11.0598 5.08503 11.1915C5.15083 11.3296 5.25343 11.4469 5.3816 11.5307C5.50976 11.6145 5.65856 11.6615 5.8117 11.6665H8.63489L7.48223 17.3332C7.44385 17.5216 7.47194 17.7174 7.56176 17.8876C7.65157 18.0577 7.79758 18.1915 7.97503 18.2665C8.08321 18.3125 8.19991 18.3353 8.31749 18.3332C8.45215 18.333 8.58476 18.3003 8.70402 18.2379C8.82328 18.1755 8.92565 18.0852 9.0024 17.9748L14.8492 9.64151C14.9363 9.51728 14.9878 9.3717 14.9981 9.22046C15.0084 9.06921 14.9771 8.91803 14.9077 8.78318Z" fill="#007250"/></svg></span>
+          <span class="ribbon__text">&euro;100 korting*</span>
+        </div>
+      </div>
+      <h2 class="card__title">Zon &amp; Wind Flex One +<br>Aardgas Fix One</h2>
+      <ul class="card__features">
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Variabele prijs</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Profiteer meteen van prijsdalingen</span>
+        </li>
+      </ul>
+      <div class="card__price">
+        <span class="price__euro">&euro;</span>
+        <span class="price__amount">102,45</span>
+        <span class="price__original">&euro; 119,12</span>
+        <span class="price__period">per maand</span>
+      </div>
+      <div class="card__conditional">
+        <div class="conditional__box">
+          <div class="conditional__label">
+            <span>Prijs met voorwaardelijke korting</span>
+            <svg class="conditional__info" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 1.667A8.333 8.333 0 1 0 10 18.333 8.333 8.333 0 0 0 10 1.667Zm0 12.5a.833.833 0 0 1-.833-.834V10a.833.833 0 1 1 1.666 0v3.333a.833.833 0 0 1-.833.834ZM10.833 7.5H9.167V5.833h1.666V7.5Z" fill="#2F2D2D"/></svg>
+          </div>
+          <div class="conditional__price">
+            <span class="conditional__price-amount">&euro; 89,90</span>
+            <span class="conditional__price-period">per maand</span>
+          </div>
+        </div>
+      </div>
+      <div class="card__cta">
+        <a class="cta__button" href="#">Product selecteren</a>
+        <a class="cta__link" href="#">Bekijk de details</a>
+      </div>
+      <footer class="card__footnotes">
+        <div class="footnote">
+          <span class="footnote__asterisk">*</span>
+          <div class="footnote__text">
+            <p>Zon &amp; Wind Flex One: 100&euro; korting en 2,40 &euro;c/kWh korting. Aanbod geldig tot en met 18/09/2026</p>
+          </div>
+        </div>
+      </footer>
+    </article>
+
+    <article class="card">
+      <div class="card__bg"></div>
+      <div class="card__ribbon"></div>
+      <h2 class="card__title">Zon &amp; Wind Vast +<br>Aardgas Vast</h2>
+      <ul class="card__features">
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Variabele prijs</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Profiteer meteen van prijsdalingen</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">100% groene en Belgische elektriciteit</span>
+        </li>
+      </ul>
+      <div class="card__price">
+        <span class="price__euro">&euro;</span>
+        <span class="price__amount">119,12</span>
+        <span class="price__period">per maand</span>
+      </div>
+      <div class="card__conditional"></div>
+      <div class="card__cta">
+        <a class="cta__button" href="#">Product selecteren</a>
+        <a class="cta__link" href="#">Bekijk de details</a>
+      </div>
+      <footer class="card__footnotes"></footer>
+    </article>
+
+    <article class="card card--extra">
+      <div class="card__bg"></div>
+      <div class="card__ribbon"></div>
+      <h2 class="card__title">Zon &amp; Wind Vast +<br>Aardgas Fix One</h2>
+      <ul class="card__features">
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Vaste prijs</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">Zekerheid over je maandbedrag</span>
+        </li>
+        <li class="feature">
+          <svg class="feature__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18a1 1 0 0 1-.71-.29l-4-4a1.004 1.004 0 1 1 1.42-1.42L9 15.59l9.29-9.3a1.004 1.004 0 0 1 1.42 1.42l-10 10A1 1 0 0 1 9 18Z" fill="#009B65"/></svg>
+          <span class="feature__text">100% groene en Belgische elektriciteit</span>
+        </li>
+      </ul>
+      <div class="card__price">
+        <span class="price__euro">&euro;</span>
+        <span class="price__amount">112,80</span>
+        <span class="price__period">per maand</span>
+      </div>
+      <div class="card__conditional"></div>
+      <div class="card__cta">
+        <a class="cta__button" href="#">Product selecteren</a>
+        <a class="cta__link" href="#">Bekijk de details</a>
+      </div>
+      <footer class="card__footnotes"></footer>
+    </article>
+
+    </div>
+  </main>
+
+  <div class="support-fabs">
+    <button class="support-fab support-fab--phone" aria-label="Bel ons">
+      <span class="support-fab__label">Bel ons</span>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1.003 1.003 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.1.31.03.66-.25.94l-2.2 2.28z" fill="#007250"/></svg>
+    </button>
+    <button class="support-fab support-fab--chat" aria-label="Chat met Elli">
+      <span class="support-fab__label">Chat met Elli</span>
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" fill="#007250"/><rect x="7" y="7" width="10" height="1.5" rx=".75" fill="#fff"/><rect x="7" y="10.5" width="7" height="1.5" rx=".75" fill="#fff"/></svg>
+    </button>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.pricing-grid .card');
+    cards.forEach((card, i) => {
+      card.style.setProperty('--col', i + 1);
+    });
+
+    const toggle = document.getElementById('card-toggle');
+    const grid = document.querySelector('.pricing-grid');
+    const label3 = document.getElementById('label-3');
+    const label4 = document.getElementById('label-4');
+
+    toggle.addEventListener('click', () => {
+      const show4 = toggle.getAttribute('aria-checked') !== 'true';
+      toggle.setAttribute('aria-checked', show4);
+      grid.classList.toggle('pricing-grid--four', show4);
+      label3.classList.toggle('card-toggle__label--active', !show4);
+      label4.classList.toggle('card-toggle__label--active', show4);
+    });
+  </script>
+
+</body>
+</html>
